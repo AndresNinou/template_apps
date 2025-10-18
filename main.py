@@ -31,7 +31,7 @@ class PizzazWidget:
     response_text: str
 
 
-ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
 
 @lru_cache(maxsize=None)
