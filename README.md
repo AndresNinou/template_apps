@@ -30,7 +30,7 @@ uv sync
 uv run python main.py
 ```
 
-This boots a FastAPI app with uvicorn on `http://127.0.0.1:8000` (equivalently `uv run uvicorn pizzaz_server_python.main:app --port 8000`). The endpoints mirror the Node demo:
+This boots a FastAPI app with uvicorn on `http://127.0.0.1:8202` (equivalently `uv run uvicorn pizzaz_server_python.main:app --port 8202`). The endpoints mirror the Node demo:
 
 - `GET /mcp` exposes the SSE stream.
 - `POST /mcp/messages?sessionId=...` accepts follow-up messages for an active session.
