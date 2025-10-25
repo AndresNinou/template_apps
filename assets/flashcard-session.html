@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Session</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .session-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .session-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .session-title {
+            font-size: 2.2em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .session-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-content {
+            text-align: center;
+            font-size: 1.3em;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .card-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .card-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .flip-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85em;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-difficult {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-medium {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-easy {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-next {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-prev {
+            background: #9c27b0;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            border-radius: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .completion-message.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completion-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .completion-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .completion-stat {
+            text-align: center;
+        }
+
+        .completion-stat-value {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .completion-stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .session-container {
+                padding: 20px;
+            }
+
+            .session-title {
+                font-size: 1.8em;
+            }
+
+            .flashcard {
+                height: 300px;
+            }
+
+            .card-content {
+                font-size: 1.1em;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="session-container">
+        <div class="session-header">
+            <h1 class="session-title" id="session-title">Flashcard Session</h1>
+        </div>
+
+        <div class="session-info">
+            <div class="info-item">
+                <div class="info-label">Topic</div>
+                <div class="info-value" id="topic-display">Loading...</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Difficulty</div>
+                <div class="info-value" id="difficulty-display">Loading...</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Progress</div>
+                <div class="info-value" id="progress-display">0/0</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face flashcard-front">
+                    <div class="card-label">Question</div>
+                    <div class="card-number" id="card-number">1/10</div>
+                    <div class="card-content" id="front-content">
+                        Click to load flashcards...
+                    </div>
+                    <div class="flip-hint">
+                        <span>🔄</span>
+                        <span>Click to flip</span>
+                    </div>
+                </div>
+                <div class="flashcard-face flashcard-back">
+                    <div class="card-label">Answer</div>
+                    <div class="card-number" id="card-number-back">1/10</div>
+                    <div class="card-content" id="back-content">
+                        Answer will appear here...
+                    </div>
+                    <div class="flip-hint">
+                        <span>🔄</span>
+                        <span>Click to flip back</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-prev" id="prev-btn" onclick="previousCard()">Previous</button>
+            <button class="btn btn-difficult" onclick="rateCard('difficult')">Hard</button>
+            <button class="btn btn-medium" onclick="rateCard('medium')">Good</button>
+            <button class="btn btn-easy" onclick="rateCard('easy')">Easy</button>
+            <button class="btn btn-next" id="next-btn" onclick="nextCard()">Next</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="easy-count">0</div>
+                <div class="stat-label">Easy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="medium-count">0</div>
+                <div class="stat-label">Good</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="difficult-count">0</div>
+                <div class="stat-label">Hard</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="remaining-count">0</div>
+                <div class="stat-label">Remaining</div>
+            </div>
+        </div>
+
+        <div class="completion-message" id="completion-message">
+            <div class="completion-title">🎉 Session Complete!</div>
+            <p>Great job! You've completed all the flashcards.</p>
+            <div class="completion-stats">
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="total-reviewed">0</div>
+                    <div class="completion-stat-label">Cards Reviewed</div>
+                </div>
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="accuracy-rate">0%</div>
+                    <div class="completion-stat-label">Accuracy Rate</div>
+                </div>
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="session-time">0m</div>
+                    <div class="completion-stat-label">Session Time</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Flashcard session state
+        let flashcards = [];
+        let currentCardIndex = 0;
+        let sessionStats = {
+            easy: 0,
+            medium: 0,
+            difficult: 0,
+            reviewed: [],
+            startTime: Date.now()
+        };
+
+        // Initialize the flashcard session
+        function initializeSession() {
+            const sessionData = window.openai?.toolOutput || {};
+            
+            if (sessionData.flashcards && sessionData.flashcards.length > 0) {
+                flashcards = sessionData.flashcards;
+                document.getElementById('session-title').textContent = `Flashcard Session: ${sessionData.topic}`;
+                document.getElementById('topic-display').textContent = sessionData.topic;
+                document.getElementById('difficulty-display').textContent = sessionData.difficulty;
+                
+                updateProgress();
+                displayCurrentCard();
+                updateStats();
+            } else {
+                document.getElementById('front-content').textContent = 'No flashcards available. Please generate flashcards first.';
+            }
+        }
+
+        function displayCurrentCard() {
+            if (currentCardIndex >= flashcards.length) {
+                showCompletion();
+                return;
+            }
+
+            const card = flashcards[currentCardIndex];
+            const flashcardElement = document.getElementById('flashcard');
+            
+            // Reset flip state
+            flashcardElement.classList.remove('flipped');
+            
+            // Update content
+            document.getElementById('front-content').textContent = card.front;
+            document.getElementById('back-content').textContent = card.back;
+            document.getElementById('card-number').textContent = `${currentCardIndex + 1}/${flashcards.length}`;
+            document.getElementById('card-number-back').textContent = `${currentCardIndex + 1}/${flashcards.length}`;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentCardIndex === 0;
+            document.getElementById('next-btn').disabled = currentCardIndex === flashcards.length - 1;
+        }
+
+        function updateProgress() {
+            const progress = ((currentCardIndex) / flashcards.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('progress-display').textContent = `${currentCardIndex}/${flashcards.length}`;
+        }
+
+        function updateStats() {
+            document.getElementById('easy-count').textContent = sessionStats.easy;
+            document.getElementById('medium-count').textContent = sessionStats.medium;
+            document.getElementById('difficult-count').textContent = sessionStats.difficult;
+            document.getElementById('remaining-count').textContent = flashcards.length - currentCardIndex;
+        }
+
+        function flipCard() {
+            const flashcardElement = document.getElementById('flashcard');
+            flashcardElement.classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                displayCurrentCard();
+                updateProgress();
+            }
+        }
+
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                displayCurrentCard();
+                updateProgress();
+            }
+        }
+
+        function rateCard(difficulty) {
+            // Record the rating
+            sessionStats[difficulty]++;
+            sessionStats.reviewed.push({
+                cardIndex: currentCardIndex,
+                difficulty: difficulty,
+                timestamp: Date.now()
+            });
+            
+            // Move to next card
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                displayCurrentCard();
+                updateProgress();
+            } else {
+                showCompletion();
+            }
+            
+            updateStats();
+        }
+
+        function showCompletion() {
+            const completionMessage = document.getElementById('completion-message');
+            completionMessage.classList.add('show');
+            
+            // Calculate completion stats
+            const totalReviewed = sessionStats.reviewed.length;
+            const easyRate = (sessionStats.easy / totalReviewed) * 100;
+            const sessionTime = Math.round((Date.now() - sessionStats.startTime) / 60000);
+            
+            document.getElementById('total-reviewed').textContent = totalReviewed;
+            document.getElementById('accuracy-rate').textContent = `${Math.round(easyRate)}%`;
+            document.getElementById('session-time').textContent = `${sessionTime}m`;
+            
+            // Hide flashcard
+            document.querySelector('.flashcard-container').style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('flashcard').addEventListener('click', flipCard);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    flipCard();
+                    break;
+                case 'ArrowLeft':
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    nextCard();
+                    break;
+                case '1':
+                    rateCard('difficult');
+                    break;
+                case '2':
+                    rateCard('medium');
+                    break;
+                case '3':
+                    rateCard('easy');
+                    break;
+            }
+        });
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', initializeSession);
+        
+        // Also initialize if data becomes available later
+        if (window.openai?.toolOutput) {
+            initializeSession();
+        }
+    </script>
+</body>
+</html>

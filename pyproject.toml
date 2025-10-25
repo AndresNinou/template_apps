@@ -3,16 +3,16 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pizzaz-mcp-server"
+name = "learn-anything-mcp-server"
 version = "0.1.0"
-description = "Pizzaz demo MCP server implemented with the Python FastMCP helper"
+description = "Learn Anything - Roadmap and Anki-style flashcard learning app"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "MCP Team", email = "team@example.com"},
+    {name = "Learn Anything Team", email = "team@learnanything.com"},
 ]
-keywords = ["mcp", "server", "fastapi", "demo"]
+keywords = ["mcp", "server", "fastapi", "learning", "education", "flashcards", "roadmap"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -26,6 +26,12 @@ dependencies = [
     "mcp>=0.1.0",
     "fastapi>=0.115.0",
     "uvicorn>=0.30.0",
+    "pydantic>=2.0.0",
+    "httpx>=0.25.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",
+    "python-multipart>=0.0.6",
+    "aiofiles>=23.0.0",
 ]
 
 [project.optional-dependencies]
@@ -37,12 +43,12 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/modelcontextprotocol/servers"
-Repository = "https://github.com/modelcontextprotocol/servers"
-Documentation = "https://github.com/modelcontextprotocol/servers/tree/main/src/pizzaz"
+Homepage = "https://github.com/learnanything/servers"
+Repository = "https://github.com/learnanything/servers"
+Documentation = "https://github.com/learnanything/servers/tree/main/src/learn-anything"
 
 [project.scripts]
-pizzaz-server = "main:app"
+learn-anything-server = "main:app"
 
 [tool.ruff]
 line-length = 88

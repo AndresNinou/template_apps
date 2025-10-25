@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Roadmap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .roadmap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .learning-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .info-card p {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .modules-container {
+            margin-bottom: 40px;
+        }
+
+        .module {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .module-title {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .difficulty-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-beginner {
+            background: #4caf50;
+            color: white;
+        }
+
+        .difficulty-intermediate {
+            background: #ff9800;
+            color: white;
+        }
+
+        .difficulty-advanced {
+            background: #f44336;
+            color: white;
+        }
+
+        .duration {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .module-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .resources {
+            margin-bottom: 20px;
+        }
+
+        .resources h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .resource-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .resource-item:hover {
+            background: #e9ecef;
+        }
+
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .resource-video {
+            background: #ff0000;
+        }
+
+        .resource-article {
+            background: #2196f3;
+        }
+
+        .resource-book {
+            background: #4caf50;
+        }
+
+        .resource-course {
+            background: #9c27b0;
+        }
+
+        .resource-research {
+            background: #ff9800;
+        }
+
+        .resource-details {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .resource-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .milestones {
+            margin-top: 20px;
+        }
+
+        .milestones h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .milestone-list {
+            list-style: none;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .milestone-item::before {
+            content: '✓';
+            background: #4caf50;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .learning-path {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .learning-path h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .path-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .key-skills {
+            text-align: left;
+        }
+
+        .key-skills h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .roadmap-container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .module-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .module-meta {
+                flex-wrap: wrap;
+            }
+
+            .path-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="roadmap-container">
+        <div class="header">
+            <h1 id="roadmap-title">Your Learning Roadmap</h1>
+            <p class="subtitle">Personalized learning path designed for your success</p>
+        </div>
+
+        <div class="learning-info" id="learning-info">
+            <div class="info-card">
+                <h3>Topic</h3>
+                <p id="topic-display">Loading...</p>
+            </div>
+            <div class="info-card">
+                <h3>Current Level</h3>
+                <p id="level-display">Loading...</p>
+            </div>
+            <div class="info-card">
+                <h3>Learning Style</h3>
+                <p id="style-display">Loading...</p>
+            </div>
+            <div class="info-card">
+                <h3>Time Commitment</h3>
+                <p id="time-display">Loading...</p>
+            </div>
+        </div>
+
+        <div class="modules-container" id="modules-container">
+            <!-- Modules will be dynamically inserted here -->
+        </div>
+
+        <div class="learning-path" id="learning-path">
+            <h3>Your Learning Journey</h3>
+            <div class="path-stats" id="path-stats">
+                <!-- Stats will be dynamically inserted here -->
+            </div>
+            <div class="key-skills">
+                <h4>Key Skills You'll Develop</h4>
+                <div class="skills-list" id="skills-list">
+                    <!-- Skills will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the roadmap with data from the server
+        function initializeRoadmap() {
+            // Get data from window.openai.toolOutput (provided by ChatGPT)
+            const roadmapData = window.openai?.toolOutput || {};
+            
+            if (roadmapData.topic) {
+                document.getElementById('roadmap-title').textContent = `Learning Roadmap: ${roadmapData.topic}`;
+                document.getElementById('topic-display').textContent = roadmapData.topic;
+                document.getElementById('level-display').textContent = roadmapData.current_level || 'beginner';
+                document.getElementById('style-display').textContent = roadmapData.learning_style || 'visual';
+                document.getElementById('time-display').textContent = roadmapData.time_commitment || 'medium';
+                
+                renderModules(roadmapData.modules || []);
+                renderLearningPath(roadmapData.learning_path || {});
+            }
+        }
+
+        function renderModules(modules) {
+            const container = document.getElementById('modules-container');
+            container.innerHTML = '';
+            
+            modules.forEach((module, index) => {
+                const moduleElement = createModuleElement(module, index + 1);
+                container.appendChild(moduleElement);
+            });
+        }
+
+        function createModuleElement(module, moduleNumber) {
+            const moduleDiv = document.createElement('div');
+            moduleDiv.className = 'module';
+            moduleDiv.style.animationDelay = `${moduleNumber * 0.1}s`;
+            
+            const resourcesHtml = module.resources.map(resource => `
+                <div class="resource-item">
+                    <div class="resource-icon resource-${resource.type}">
+                        ${getResourceIcon(resource.type)}
+                    </div>
+                    <div class="resource-details">
+                        <div class="resource-title">${resource.title}</div>
+                        <div class="resource-meta">${resource.source} • ${getResourceMeta(resource)}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            const milestonesHtml = module.milestones.map(milestone => `
+                <li class="milestone-item">${milestone}</li>
+            `).join('');
+            
+            moduleDiv.innerHTML = `
+                <div class="module-header">
+                    <h3 class="module-title">${module.title}</h3>
+                    <div class="module-meta">
+                        <span class="difficulty-badge difficulty-${module.difficulty}">${module.difficulty}</span>
+                        <span class="duration">${module.duration}</span>
+                    </div>
+                </div>
+                <p class="module-description">${module.description}</p>
+                <div class="resources">
+                    <h4>📚 Learning Resources</h4>
+                    <div class="resource-list">
+                        ${resourcesHtml}
+                    </div>
+                </div>
+                <div class="milestones">
+                    <h4>🎯 Milestones</h4>
+                    <ul class="milestone-list">
+                        ${milestonesHtml}
+                    </ul>
+                </div>
+            `;
+            
+            return moduleDiv;
+        }
+
+        function getResourceIcon(type) {
+            const icons = {
+                video: '▶',
+                article: '📄',
+                book: '📚',
+                course: '🎓',
+                research: '🔬'
+            };
+            return icons[type] || '📋';
+        }
+
+        function getResourceMeta(resource) {
+            if (resource.duration) return resource.duration;
+            if (resource.read_time) return resource.read_time;
+            if (resource.pages) return `${resource.pages} pages`;
+            if (resource.papers) return `${resource.papers} papers`;
+            if (resource.weeks) return `${resource.weeks} weeks`;
+            return 'View resource';
+        }
+
+        function renderLearningPath(learningPath) {
+            const statsContainer = document.getElementById('path-stats');
+            const skillsContainer = document.getElementById('skills-list');
+            
+            const stats = [
+                { label: 'Total Duration', value: learningPath.total_duration || '9-13 weeks' },
+                { label: 'Estimated Hours', value: learningPath.estimated_hours || '120-180 hours' },
+                { label: 'Skills to Master', value: learningPath.key_skills?.length || 5 }
+            ];
+            
+            statsContainer.innerHTML = stats.map(stat => `
+                <div class="stat-item">
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                </div>
+            `).join('');
+            
+            if (learningPath.key_skills) {
+                skillsContainer.innerHTML = learningPath.key_skills.map(skill => `
+                    <span class="skill-tag">${skill}</span>
+                `).join('');
+            }
+        }
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', initializeRoadmap);
+        
+        // Also initialize if data becomes available later
+        if (window.openai?.toolOutput) {
+            initializeRoadmap();
+        }
+    </script>
+</body>
+</html>
